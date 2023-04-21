@@ -457,7 +457,7 @@ static NSMutableArray<FlutterResult>* getRidResults;
         });
     }];
    
-    
+
 }
 - (void)openSettingsForNotification {
     JPLog(@"openSettingsForNotification:");
@@ -546,6 +546,15 @@ static NSMutableArray<FlutterResult>* getRidResults;
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     [JPUSHService registerDeviceToken:deviceToken];
+    if ([deviceToken isKindOfClass:[NSData class]]) {
+        const unsigned *tokenBytes = [deviceToken bytes];
+        NSString *token = [NSString stringWithFormat:@"%08x%08x%08x%08x%08x%08x%08x%08x",
+                              ntohl(tokenBytes[0]), ntohl(tokenBytes[1]), ntohl(tokenBytes[2]),
+                              ntohl(tokenBytes[3]), ntohl(tokenBytes[4]), ntohl(tokenBytes[5]),
+                              ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
+        
+        [_channel invokeMethod:@"onIosDeviceToken" arguments:@{@"token":token}];
+    }
 }
 
 - (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings {

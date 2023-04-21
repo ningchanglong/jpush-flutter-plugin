@@ -42,6 +42,8 @@ class _MyAppState extends State<MyApp> {
         setState(() {
           debugLable = "flutter onReceiveMessage: $message";
         });
+      }, onIosDeviceToken: (Map<String, dynamic> message) async {
+            debugPrint('---> initPlatformState message: ${message}');
       }, onReceiveNotificationAuthorization:
               (Map<String, dynamic> message) async {
         print("flutter onReceiveNotificationAuthorization: $message");
@@ -54,7 +56,7 @@ class _MyAppState extends State<MyApp> {
     }
 
     jpush.setup(
-      appKey: "xxxxx", //你自己应用的 AppKey
+      appKey: "2de5c85d79dd19b27e6e7096", //你自己应用的 AppKey
       channel: "theChannel",
       production: false,
       debug: true,
